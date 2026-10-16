@@ -1,0 +1,59 @@
+# =============================================================================
+# Reference Validator Plugin Configuration — Spec Version 3.0
+#
+# TERMINOLOGY
+# -----------
+#   packageGroup    A named, immutable set of FHIR packages that are ALWAYS
+#                   loaded together. Contains no dates and no references to
+#                   other groups — what you read is exactly what gets loaded.
+#
+#   profileFamily   A set of FHIR profiles sharing the same canonical base URL
+#                   and the same release cycle (e.g. all KBV e-prescription
+#                   profiles).
+#
+#   version         A supported profile version (as found after the "|" in a
+#                   canonical, e.g. "https://fhir.kbv.de/...|1.0.2"). Each
+#                   version declares WHICH packageGroup is active WHEN.
+#
+#   groups          A list of entries binding a packageGroup by name to an explicit
+#                   date range [validFrom, validTill]. An entry WITHOUT
+#                   validTill is open-ended: it is the currently active group
+#                   and serves as the fallback when no reference date can be
+#                   determined. At most ONE open-ended entry per version.
+#
+#   validityDateSource
+#                   A FHIRPath expression evaluated against the resource to
+#                   extract the reference date (formerly creationDateLocator).
+configSpecVersion: '3.0'
+name: epa3-basic
+author: 'gematik GmbH'
+description: 'Validation Module for the Specification "ePA_3_1_3-4"'
+version: '${project.version}' # follows the maven version
+specUrl: 'https://simplifier.net/packages/de.gematik.epa/1.3.2'
+errorOnUnknownProfile: "true"
+anyExtensionsAllowed: "false"
+
+ignoredCodeSystems:
+#  - "http://snomed.info/sct" 
+ignoredValueSets:
+#  - "http://hl7.org/fhir/uv/ips/ValueSet/medicine-doseform" 
+globalSuppressionRules:
+messageTransformations:
+
+packageGroups:
+  epa3:
+    packages:
+     - "de.gematik.epa#1.3.2"
+
+profileFamilies:
+  epa3:
+    canonicalBase: "https://gematik.de/fhir/epa/StructureDefinition"
+    defaultVersion: "1.3.2"
+    versions:
+      "1.3.2":
+        groups:
+          - packageGroupName: epa3
+
+# used examples from:
+# - https://simplifier.net/packages/de.gematik.epa/1.3.2/~files
+# - https://gemspec.gematik.de/ig/fhir/epa/1.3.2/artifacts.html#beispielinstanzen
